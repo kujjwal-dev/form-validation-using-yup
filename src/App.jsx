@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import FormWihoutYup from './Form-Wihout-Yup'
+import FormWithYup from './Form-With-Yup'
 
 
 function App() {
@@ -7,7 +8,8 @@ function App() {
 
   return (
     <>
-     <FormWihoutYup/>
+     {/* <FormWihoutYup/> */}
+     <FormWithYup/>
     </>
   )
 }
