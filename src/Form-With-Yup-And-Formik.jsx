@@ -2,6 +2,8 @@ import { useState } from "react";
 import * as Yup from "yup";
 import { Formik, useFormik } from "formik";
 
+const interestsList = ['Coding', 'Sports','Reading'];
+
 const initialValues = {
   firstName: "",
   lastName: "",
@@ -50,7 +52,7 @@ const validationSchema = Yup.object({
 });
 
 const FormWithYupAndFormik = () => {
-  const { values, handleBlur, handleChange, handleSubmit, errors} = useFormik({
+  const { values, handleBlur, handleChange, handleSubmit, errors , setFieldValue} = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -58,22 +60,7 @@ const FormWithYupAndFormik = () => {
     },
   });
 
-  // const handleCheckboxChange = (e) => {
-  //   const { name, checked } = e.target;
-  //   let updatedInterests = [...values.interests];
-  //   if (checked) {
-  //     updatedInterests.push(name);
-  //   } else {
-  //     updatedInterests = updatedInterests.filter(
-  //       (interest) => interest !== name
-  //     );
-  //   }
-
-  //   setFormData({
-  //     ...formData,
-  //     interests: updatedInterests,
-  //   });
-  // };
+ 
 
   return (
     <form className="form" onSubmit={handleSubmit}>
@@ -171,7 +158,33 @@ const FormWithYupAndFormik = () => {
 
       <div>
         <label>Interests:</label>
-        <label>
+        { interestsList.map((interest , index) => (
+          <label key={index}>
+            <input
+              id={`interest-${index}`}
+              type="checkbox"
+              name="interests"
+              value={interest}
+              checked={values.interests.includes(interest)}
+              onChange= {(e) => {
+                const newInterests = [...values.interests];
+                if(e.target.checked){
+                  newInterests.push(interest);
+                } else {
+                  const index = newInterests.indexOf(interest);
+                  if(index !== -1){
+                    newInterests.splice(index, 1);
+                  }
+                }
+                setFieldValue("interests", newInterests);
+              }}
+            />
+            {interest}
+          </label>
+
+        )) }
+      
+        {/* <label>
           <input
             type="checkbox"
             name="coding"
@@ -197,7 +210,7 @@ const FormWithYupAndFormik = () => {
             onChange={handleCheckboxChange}
           />
           Reading
-        </label>
+        </label> */}
         {errors.interests && <div className="error">{errors.interests}</div>}
       </div>
       <div>
